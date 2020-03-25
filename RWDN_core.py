@@ -154,8 +154,7 @@ class RandomWaterDistributionNetwork:
 
         for i in range(n_edges):
             edge = edges_list[i]
-            if edge[0] == edge[1]: self.problematic_pipes.append(i)
-            elif edge[2]['length'] > 2000: continue
+            if edge[0] == edge[1] or edge[2]['length'] > 2000: self.problematic_pipes.append(i)
             else:
                 wn.add_pipe('{}' .format(i), edge[0], edge[1], length=edge[2]['length'], diameter=0.2, roughness=edge[2]['roughness'],
                 minor_loss=0.0, status='OPEN')
