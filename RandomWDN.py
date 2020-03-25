@@ -2,7 +2,7 @@
     This script generates random water distribution networks as INP files.
 """
 
-from RWDN import RandomWaterDistributionNetwork
+from RWDN_core import RandomWaterDistributionNetwork
 import pandas as pd
 import osmnx as ox
 import networkx as nx
