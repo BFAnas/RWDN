@@ -151,14 +151,21 @@ class RandomWaterDistributionNetwork:
             reservoir = G.nodes['Reservoir{}' .format(i)]
             wn.add_reservoir('Reservoir{}' .format(i), base_head=reservoir['elevation'], coordinates=(reservoir['x'], reservoir['y']))
         
-
+        connected_nodes = []
         for i in range(n_edges):
             edge = edges_list[i]
             if edge[0] == edge[1] or edge[2]['length'] > 2000: self.problematic_pipes.append(i)
             else:
                 wn.add_pipe('{}' .format(i), edge[0], edge[1], length=edge[2]['length'], diameter=0.2, roughness=edge[2]['roughness'],
                 minor_loss=0.0, status='OPEN')
+                connected_nodes.append('{}' .format(edge[0]))
+                connected_nodes.append('{}' .format(edge[1]))
 
+        disconnected_nodes = set(wn.node_name_list)-set(connected_nodes)
+        # print(disconnected_nodes, len(disconnected_nodes))
+        for i in disconnected_nodes:
+            wn.remove_node('{}'.format(i))
+            
         return wn
 
 
@@ -206,7 +213,7 @@ class RandomWaterDistributionNetwork:
             sim = wntr.sim.EpanetSimulator(wn)
             results = sim.run_sim()
             velocity = results.link['velocity'].values[0]
-            print(c)
+            # print(c)
             for link in pipes_list:
                 pipe = wn.get_link('{}'.format(link))
                 node1 = pipe.start_node_name
@@ -214,22 +221,22 @@ class RandomWaterDistributionNetwork:
                 pressure1 = results.node['pressure'][node1][0]
                 pressure2 = results.node['pressure'][node2][0]
                 pressure = (pressure1 + pressure2)/2
-                print(pressure)
+                # print(pressure)
                 if velocity[link] < 0.5 and pressure > 70:
                     pipe.diameter = smaller_diameter(pipe.diameter)
-                    print(pipe.diameter, c)
+                    # print(pipe.diameter, c)
                     counter += 1
                 if velocity[link] > 1.5 and pressure < 40:
                     pipe.diameter = bigger_diameter(pipe.diameter)
-                    print(pipe.diameter, c)
+                    # print(pipe.diameter, c)
                     counter += 1
                 if velocity[link] > 2.5:
                     pipe.diameter = bigger_diameter(pipe.diameter)
-                    print(pipe.diameter, c)
+                    # print(pipe.diameter, c)
                     counter += 1
                 if velocity[link] < 0.01:
                     pipe.diameter = smaller_diameter(pipe.diameter)
-                    print(pipe.diameter, c)
+                    # print(pipe.diameter, c)
                     counter += 1
         return wn
 
@@ -273,7 +280,7 @@ class RandomWaterDistributionNetwork:
 
         wn.write_inpfile(filename, units='CMH')
 
-    @property
+    # @property
     def stats(self, wn):
         '''
         Calculates some stats of the network
