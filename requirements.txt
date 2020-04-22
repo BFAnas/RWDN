@@ -94,7 +94,7 @@ Shapely==1.7.0
 six==1.14.0
 soupsieve==2.0
 tensorboard==1.15.0
-tensorflow==1.15.1
+tensorflow==1.15.2
 tensorflow-estimator==1.15.1
 termcolor==1.1.0
 tornado==6.0.3
