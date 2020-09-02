@@ -1,4 +1,4 @@
-The file RandomWDN.py is a python script for generating random water distribution networks from street network data. To run  this file you need:
+The file Generate.py is a python script for generating random water distribution networks from street network data. To run  this file you need:
 
 - To have the packages in 'requirements.txt' installed.
 
