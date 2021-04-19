@@ -11,12 +11,10 @@ import osmnx as ox
 import networkx as nx
 import csv
 
-
 gmap_key = input("Enter gmap_key (Google maps API): \n")
 
 # Creating the ouput directory
-output_dir =  os.getcwd()
-output_dir = output_dir + '/ouput'
+output_dir = os.getcwd() + '/ouput'
 while True:    
     try:
         os.makedirs(output_dir)
@@ -27,10 +25,10 @@ while True:
     break
 
 # number_of_WDN =  int(input("Enter the number of WDNs you wish to be generated: \n"))
-number_of_WDN = 20
+number_of_WDN = 1
 
 # Loading cities data from which the location of the streets will be generated
-world_cities = pd.read_csv(os.getcwd()+"/simplemaps_worldcities_basicv1.6/worldcities.csv")
+world_cities = pd.read_csv("data/simplemaps_worldcities_basicv1.73/worldcities.csv")
 
 # the minimal population for the cities to be used for the generation of the Virtual Water Network
 min_population = 100000
@@ -56,7 +54,7 @@ sf = 0.01
 
 j=0
 while j < number_of_WDN:
-    distance = random.randint(4000, 7500)
+    distance = random.randint(1000, 1500)
 
     # Instantiating the class RandomWaterDistributionNetwork
     rd = RandomWaterDistributionNetwork(gmap_key, world_cities, min_population, distance, demand_values, roughness_values, reservoir_heads, pipes_diameters)
@@ -110,7 +108,7 @@ while j < number_of_WDN:
     print('Pipe sizing performed')
 
     # Divide the network to sectors and add valves between sectors
-    wn = rd.add_valves(wn, subG, n_sectors=35)
+    wn = rd.add_valves(wn, subG, n_sectors=5)
     print('Valves have been added to the network')
     stats = rd.stats(wn)
 
